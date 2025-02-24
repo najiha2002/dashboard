@@ -66,11 +66,6 @@ jobs:
     - name: Test Docker Build Locally
       run: docker build -t najiha2002/dashboard:test .
 
-    - name: Run Health Check Test
-      run: |
-        sleep 5  # Wait for FastAPI server to start
-        curl -f http://127.0.0.1:8000/health || (echo "❌ Health check failed" && exit 1)
-
     - name: Run Tests in Docker Container
       run: |
         docker run --rm -d -p 8000:8000 --name test_dashboard najiha2002/dashboard:latest
@@ -85,7 +80,7 @@ jobs:
       run: |
         STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/health)
         if [ "$STATUS_CODE" -ne 200 ]; then
-          echo "❌ Deployment failed! Rolling back to the previous version..."
+          echo "Deployment failed! Rolling back to the previous version..."
           PREVIOUS_VERSION=$(docker images najiha2002/dashboard --format "{{.Tag}}" | sort -r | sed -n '2p')
           if [ -n "$PREVIOUS_VERSION" ]; then
             docker tag najiha2002/dashboard:$PREVIOUS_VERSION najiha2002/dashboard:latest
