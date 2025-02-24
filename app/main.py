@@ -52,7 +52,7 @@ def load_data():
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to the API"}
+    return {"message": "Welcome to the Microservices Dashboard API"}
 
 @app.get("/secure-data")
 def secure_endpoint(username: str = Depends(authenticate_user)):
