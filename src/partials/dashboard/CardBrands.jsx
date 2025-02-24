@@ -7,12 +7,16 @@ import { getCssVariable } from '../../utils/Utils';
 function CardBrands() {
 
   const chartData = {
-    labels: ['Visa', 'Mastercard', 'American Express', 'Discover'],
+    labels: ["Mastercard",
+      "Visa",
+      "Amex",
+      "Discover"
+    ],
     datasets: [
       {
         label: 'Card Distribution',
         data: [
-          35, 30, 40, 10
+          3209, 2326, 402, 209
         ],
         backgroundColor: [
           getCssVariable('--color-paynet-lightblue'),

@@ -21,7 +21,7 @@ function LineChart01({ data, width, height }) {
 
   useEffect(() => {
     const ctx = canvas.current;
-
+  
     if (chart) {
       chart.destroy();
     }
@@ -37,6 +37,8 @@ function LineChart01({ data, width, height }) {
           y: {
             display: true,  // Display Y-axis
             beginAtZero: true,
+            min: 0,          // Set minimum value
+            max: 100,        // Set maximum value
           },
           x: {
             type: 'time',
@@ -60,7 +62,7 @@ function LineChart01({ data, width, height }) {
           tooltip: {
             callbacks: {
               title: () => null,
-              label: (context) => formatValue(context.parsed.y),
+              label: (context) => context.parsed.y,
             },
             bodyColor: darkMode ? tooltipBodyColor.dark : tooltipBodyColor.light,
             backgroundColor: darkMode ? tooltipBgColor.dark : tooltipBgColor.light,
