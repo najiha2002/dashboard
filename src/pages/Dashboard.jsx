@@ -16,7 +16,7 @@ function Dashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
-    navigate('/login');
+    navigate('/');
   };
 
   return (
