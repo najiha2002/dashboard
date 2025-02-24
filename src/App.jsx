@@ -1,20 +1,26 @@
+// src/App.jsx
 import React, { useEffect } from 'react';
 import {
   Routes,
   Route,
-  useLocation
+  useLocation,
+  Navigate
 } from 'react-router-dom';
 
 import './css/style.css';
-
 import './charts/ChartjsConfig';
 
 // Import pages
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 
-function App() {
+// Protected Route Component
+const PrivateRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated');
+  return isAuthenticated ? children : <Navigate to="/login" />;
+};
 
+function App() {
   const location = useLocation();
 
   useEffect(() => {
@@ -26,8 +32,13 @@ function App() {
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<Login />} />
-        {/*<Route exact path="/" element={<Dashboard />} />*/}
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        } />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </>
   );
