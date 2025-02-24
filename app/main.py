@@ -1,8 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 import pandas as pd
 import os
 from functools import lru_cache
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Depends
+from auth import authenticate_user
 
 app = FastAPI()
 
@@ -31,8 +33,12 @@ def load_data():
     return users_df, cards_df
 
 @app.get("/")
-def read_root():
-    return {"message": "Welcome to the Microservices Dashboard API"}
+def root():
+    return {"message": "Welcome to the API"}
+
+@app.get("/secure-data")
+def secure_endpoint(username: str = Depends(authenticate_user)):
+    return {"message": f"Hello, {username}! You have access to this secure data."}
 
 @app.get("/users/age-dist")
 def get_age_dist():

@@ -6,3 +6,7 @@ numpy
 httpx
 pytest
 requests
+python-jose[cryptography] 
+passlib[bcrypt] 
+python-multipart
+python-dotenv
