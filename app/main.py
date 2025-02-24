@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi import FastAPI, Depends
 import pandas as pd
 import os
 import time
@@ -6,6 +7,8 @@ import logging
 from datetime import datetime
 from functools import lru_cache
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Depends
+from app.auth import authenticate_user
 
 logging.basicConfig(level=logging.INFO)
 
@@ -48,8 +51,12 @@ def load_data():
     return users_df, cards_df
 
 @app.get("/")
-def read_root():
-    return {"message": "Welcome to the Microservices Dashboard API"}
+def root():
+    return {"message": "Welcome to the API"}
+
+@app.get("/secure-data")
+def secure_endpoint(username: str = Depends(authenticate_user)):
+    return {"message": f"Hello, {username}! You have access to this secure data."}
 
 @app.get("/users/credit-score-dist")
 def get_credit_score_dist():
