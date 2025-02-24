@@ -4,7 +4,7 @@ import os
 from functools import lru_cache
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Depends
-from auth import authenticate_user
+from app.auth import authenticate_user
 
 app = FastAPI()
 

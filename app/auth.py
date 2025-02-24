@@ -7,7 +7,7 @@ security = HTTPBasic()
 def load_credentials():
     credentials = {}
     try:
-        with open("credentials.txt", "r") as file:
+        with open("/credentials.txt", "r") as file:
             for line in file:
                 username, password = line.strip().split(":")
                 credentials[username] = hashlib.sha256(password.encode()).hexdigest()  # Hash passwords
