@@ -63,12 +63,24 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
+    - name: Test Docker Build Locally
+      run: docker build -t najiha2002/dashboard:test .
+
+    - name: Run Tests in Docker Container
+      run: |
+        docker run --rm -d -p 8000:8000 --name test_dashboard najiha2002/dashboard:latest
+        sleep 5  # Allow server startup
+        pytest tests/
+        docker stop test_dashboard
+
+
+
     # ========== Rollback on Failure ==========
     - name: Verify Deployment & Rollback if Needed
       run: |
         STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/health)
         if [ "$STATUS_CODE" -ne 200 ]; then
-          echo "❌ Deployment failed! Rolling back to the previous version..."
+          echo "Deployment failed! Rolling back to the previous version..."
           PREVIOUS_VERSION=$(docker images najiha2002/dashboard --format "{{.Tag}}" | sort -r | sed -n '2p')
           if [ -n "$PREVIOUS_VERSION" ]; then
             docker tag najiha2002/dashboard:$PREVIOUS_VERSION najiha2002/dashboard:latest
