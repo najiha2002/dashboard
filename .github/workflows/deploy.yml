@@ -63,6 +63,23 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
+    - name: Test Docker Build Locally
+      run: docker build -t najiha2002/dashboard:test .
+
+    - name: Run Health Check Test
+      run: |
+        sleep 5  # Wait for FastAPI server to start
+        curl -f http://127.0.0.1:8000/health || (echo "❌ Health check failed" && exit 1)
+
+    - name: Run Tests in Docker Container
+      run: |
+        docker run --rm -d -p 8000:8000 --name test_dashboard najiha2002/dashboard:latest
+        sleep 5  # Allow server startup
+        pytest tests/
+        docker stop test_dashboard
+
+
+
     # ========== Rollback on Failure ==========
     - name: Verify Deployment & Rollback if Needed
       run: |
