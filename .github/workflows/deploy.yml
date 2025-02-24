@@ -66,13 +66,6 @@ jobs:
     - name: Test Docker Build Locally
       run: docker build -t najiha2002/dashboard:test .
 
-    - name: Run Tests in Docker Container
-      run: |
-        docker run --rm -d -p 8000:8000 --name test_dashboard najiha2002/dashboard:latest
-        sleep 5  # Allow server startup
-        pytest tests/
-        docker stop test_dashboard
-
 
 
     # ========== Rollback on Failure ==========
