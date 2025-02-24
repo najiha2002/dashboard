@@ -1,12 +1,6 @@
 // src/App.jsx
 import React, { useEffect } from 'react';
-import {
-  Routes,
-  Route,
-  useLocation,
-  Navigate
-} from 'react-router-dom';
-
+import { Routes, Route, useLocation } from 'react-router-dom';
 import './css/style.css';
 import './charts/ChartjsConfig';
 
@@ -14,13 +8,12 @@ import './charts/ChartjsConfig';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 
-// Protected Route Component
-const PrivateRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated');
-  return isAuthenticated ? children : <Navigate to="/login" />;
-};
+// Import Auth and Protected Route
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+
   const location = useLocation();
 
   useEffect(() => {
@@ -30,17 +23,16 @@ function App() {
   }, [location.pathname]); // triggered on route change
 
   return (
-    <>
+    <AuthProvider>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={
-          <PrivateRoute>
+          <ProtectedRoute>
             <Dashboard />
-          </PrivateRoute>
+          </ProtectedRoute>
         } />
-        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 
